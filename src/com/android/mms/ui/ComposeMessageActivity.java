@@ -1499,6 +1499,7 @@ public class ComposeMessageActivity extends Activity
                 // Depending on the location, there may be an
                 // extension already on the name or not
                 // User defined save location
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
                 String dir = Environment.getExternalStorageDirectory() + "/"
                                 + prefs.getString(MessagingPreferenceActivity.MMS_SAVE_LOCATION, "download")  + "/";
                 String extension;

@@ -161,7 +161,6 @@ import com.android.mms.templates.TemplateGesturesLibrary;
 import com.android.mms.templates.TemplatesProvider.Template;
 import com.android.mms.transaction.MessagingNotification;
 import com.android.mms.ui.MessageUtils.ResizeImageResultCallback;
-import com.android.mms.ui.MessagingPreferenceActivity;
 import com.android.mms.ui.RecipientsEditor.RecipientContextMenuInfo;
 import com.android.mms.util.SendingProgressTokenManager;
 import com.android.mms.util.SmileyParser;
@@ -1402,6 +1401,7 @@ public class ComposeMessageActivity extends Activity
 
                 // Depending on the location, there may be an
                 // extension already on the name or not
+                // User defined save location
                 String title = new String(location);
                 int index;
                 if ((index = title.indexOf(".")) == -1) {
@@ -1863,7 +1863,6 @@ public class ComposeMessageActivity extends Activity
 
         // Let the working message know what conversation it belongs to
         mWorkingMessage.setConversation(mConversation);
-        invalidateOptionsMenu();
 
         // Show the recipients editor if we don't have a valid thread. Hide it otherwise.
         if (mConversation.getThreadId() <= 0) {
@@ -1879,6 +1878,10 @@ public class ComposeMessageActivity extends Activity
         } else {
             hideRecipientEditor();
         }
+        invalidateOptionsMenu();    // do after show/hide of recipients editor because the options
+                                    // menu depends on the recipients, which depending upon the
+                                    // visibility of the recipients editor, returns a different
+                                    // value (see getRecipients()).
 
         updateSendButtonState();
 

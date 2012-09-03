@@ -57,7 +57,6 @@ import com.android.mms.data.Conversation;
 import com.android.mms.transaction.MessagingNotification.NotificationInfo;
 import com.android.mms.transaction.SmsMessageSender;
 import com.android.mms.ui.MessagingPreferenceActivity;
-import com.android.mms.util.EmojiParser;
 import com.android.mms.util.SmileyParser;
 import com.google.android.mms.MmsException;
 
@@ -372,25 +371,6 @@ public class QuickMessage extends Activity {
         mMessageList.clear();
     }
 
-    private CharSequence formatMessage(String message) {
-        SpannableStringBuilder buf = new SpannableStringBuilder();
-
-        // Get the emojis  preference
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
-        boolean enableEmojis = prefs.getBoolean(MessagingPreferenceActivity.ENABLE_EMOJIS, false);
-
-        if (!TextUtils.isEmpty(message)) {
-            SmileyParser parser = SmileyParser.getInstance();
-            CharSequence smileyBody = parser.addSmileySpans(message);
-            if (enableEmojis) {
-                EmojiParser emojiParser = EmojiParser.getInstance();
-                smileyBody = emojiParser.addEmojiSpans(smileyBody);
-            }
-            buf.append(smileyBody);
-        }
-        return buf;
-    }
-
     /**
      * Supporting Classes
      */
@@ -505,7 +485,6 @@ public class QuickMessage extends Activity {
                 qmFromName.setText(qm.getFromName());
                 qmTimestamp.setText(qm.getTimestamp());
                 updateContactBadge(qmContactBadge, qm.getFromNumber()[0], false);
-                qmMessageText.setText(formatMessage(qm.getMessageBody()));
 
                 // We are using a holo.light background with a holo.dark activity theme
                 // Override the EditText background to use the holo.light theme

@@ -371,6 +371,12 @@ public class QuickMessage extends Activity {
         mMessageList.clear();
     }
 
+    private CharSequence formatMessage(String message) {
+           SpannableStringBuilder buf = new SpannableStringBuilder();
+
+     return buf;
+     }
+
     /**
      * Supporting Classes
      */
@@ -485,6 +491,7 @@ public class QuickMessage extends Activity {
                 qmFromName.setText(qm.getFromName());
                 qmTimestamp.setText(qm.getTimestamp());
                 updateContactBadge(qmContactBadge, qm.getFromNumber()[0], false);
+                qmMessageText.setText(formatMessage(qm.getMessageBody()));
 
                 // We are using a holo.light background with a holo.dark activity theme
                 // Override the EditText background to use the holo.light theme

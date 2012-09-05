@@ -57,6 +57,7 @@ import com.android.mms.data.Conversation;
 import com.android.mms.transaction.MessagingNotification.NotificationInfo;
 import com.android.mms.transaction.SmsMessageSender;
 import com.android.mms.ui.MessagingPreferenceActivity;
+import com.android.mms.util.EmojiParser;
 import com.android.mms.util.SmileyParser;
 import com.google.android.mms.MmsException;
 
@@ -372,10 +373,23 @@ public class QuickMessage extends Activity {
     }
 
     private CharSequence formatMessage(String message) {
-           SpannableStringBuilder buf = new SpannableStringBuilder();
+        SpannableStringBuilder buf = new SpannableStringBuilder();
 
-     return buf;
-     }
+        // Get the emojis  preference
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
+        boolean enableEmojis = prefs.getBoolean(MessagingPreferenceActivity.ENABLE_EMOJIS, false);
+
+        if (!TextUtils.isEmpty(message)) {
+            SmileyParser parser = SmileyParser.getInstance();
+            CharSequence smileyBody = parser.addSmileySpans(message);
+            if (enableEmojis) {
+                EmojiParser emojiParser = EmojiParser.getInstance();
+                smileyBody = emojiParser.addEmojiSpans(smileyBody);
+            }
+            buf.append(smileyBody);
+        }
+        return buf;
+    }
 
     /**
      * Supporting Classes

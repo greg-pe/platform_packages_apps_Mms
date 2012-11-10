@@ -992,6 +992,19 @@ public class MessagingNotification {
         final Notification notification;
 
         if (messageCount == 1 || uniqueThreadCount == 1) {
+            // Add the QuickMessage action only if the pop-up won't be shown already
+            if (!qmPopupEnabled && qmIntent != null) {
+
+                // This is a QR, we should show the keyboard when the user taps to reply
+                qmIntent.putExtra(QuickMessagePopup.QR_SHOW_KEYBOARD_EXTRA, true);
+
+                // Create the pending intent and add it to the notification
+                CharSequence qmText = context.getText(R.string.qm_quick_reply);
+                PendingIntent qmPendingIntent = PendingIntent.getActivity(context, 0, qmIntent,
+                        PendingIntent.FLAG_UPDATE_CURRENT);
+                noti.addAction(R.drawable.ic_reply, qmText, qmPendingIntent);
+            }
+
             // Add the Call action
             CharSequence callText = context.getText(R.string.menu_call);
             Intent callIntent = new Intent(Intent.ACTION_CALL);
@@ -999,14 +1012,6 @@ public class MessagingNotification {
             PendingIntent mCallPendingIntent = PendingIntent.getActivity(context, 0, callIntent,
                     PendingIntent.FLAG_UPDATE_CURRENT);
             noti.addAction(R.drawable.ic_menu_call, callText, mCallPendingIntent);
-
-            // Add the QuickMessage action only if the pop-up won't be shown already
-            if (!qmPopupEnabled && qmIntent != null) {
-                CharSequence qmText = context.getText(R.string.qm_quick_reply);
-                PendingIntent qmPendingIntent = PendingIntent.getActivity(context, 0, qmIntent,
-                        PendingIntent.FLAG_UPDATE_CURRENT);
-                noti.addAction(R.drawable.ic_reply, qmText, qmPendingIntent);
-            }
         }
 
         if (messageCount == 1) {
